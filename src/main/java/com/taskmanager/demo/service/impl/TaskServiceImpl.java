@@ -42,6 +42,8 @@ public class TaskServiceImpl {
         task.setStatus(Status.valueOf(taskDto.getStatus()));
         task.setPriority(Priority.valueOf(taskDto.getPriority()));
         task.setAuthor(author);
+        task.setStatus(Status.WAITING);
+        task.setPriority(Priority.LOW);
         task.setCreationDate(new Date());
 
         return taskRepository.save(task);

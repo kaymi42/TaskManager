@@ -1,0 +1,413 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Task manager REST API",
+    "description": "Task manager REST API Docs",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local server for develop"
+    }
+  ],
+  "paths": {
+    "/me": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный результат получения информации об аутентифицированном пользователе",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ошибка получения данных о пользователе",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me/tasks": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный результат получения информации о всех задачах аутентифицированного пользователя в качестве автора",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/task"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ошибка получения данных о задачах",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me/comments": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный результат получения информации о всех комментариях аутентифицированного пользователя в качестве автора",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/comment"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ошибка получения данных о комментариях",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{username}/info": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный результат получения информации о зарегистрированном пользователе",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ошибка получения данных о пользователе",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "username",
+            "required": true,
+            "in": "path",
+            "description": "Имя пользователя",
+            "schema": {
+              "type": "string",
+              "example": "Alexander"
+            }
+          }
+        ]
+      }
+    },
+    "/{username}/tasks": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный результат получения информации о всех задачах зарегистрированного пользователя как автора",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/task"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ошибка получения данных о задачах",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "username",
+            "required": true,
+            "in": "path",
+            "description": "Имя пользователя",
+            "schema": {
+              "type": "string",
+              "example": "Alexander"
+            }
+          }
+        ]
+      }
+    },
+    "/{username}/comments": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный результат получения информации о всех комментариях зарегистрированного пользователя как автора",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/comment"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ошибка получения данных о комментариях",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "username",
+            "required": true,
+            "in": "path",
+            "description": "Имя пользователя",
+            "schema": {
+              "type": "string",
+              "example": "Alexander"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "comment": {
+        "title": "Comment",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Идентификатор комментария",
+            "nullable": false,
+            "example": "1"
+          },
+          "content": {
+            "type": "string",
+            "title": "Текст комментария",
+            "nullable": false,
+            "example": "Для задачи требуется дополнительное время"
+          },
+          "author": {
+            "type": "array",
+            "title": "Автор комментария",
+            "nullable": false,
+            "maximum": 1,
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/user"
+            }
+          }
+        }
+      },
+      "role": {
+        "title": "Role",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Идентификатор роли",
+            "nullable": false,
+            "example": "1"
+          },
+          "name": {
+            "type": "string",
+            "title": "Название роли",
+            "nullable": false,
+            "example": "ROLE_USER"
+          }
+        }
+      },
+      "appError": {
+        "title": "AppException",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "title": "Статус ошибки",
+            "nullable": false,
+            "example": "404"
+          },
+          "message": {
+            "type": "string",
+            "title": "Сообщение об ошибке",
+            "nullable": false,
+            "example": "Resource not found"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date",
+            "nullable": false,
+            "example": "Mon Jan 13 18:13:57 MSK 2025"
+          }
+        }
+      },
+      "user": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Идентификатор пользователя",
+            "nullable": false,
+            "example": "1"
+          },
+          "password": {
+            "type": "string",
+            "title": "Пароль пользователя",
+            "nullable": true,
+            "example": "123456qwerty"
+          },
+          "username": {
+            "type": "string",
+            "title": "Имя пользователя",
+            "nullable": false,
+            "example": "Alexander"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email пользователя",
+            "nullable": false,
+            "example": "alexander@mail.ru"
+          },
+          "roles": {
+            "type": "array",
+            "title": "Список ролей пользователя",
+            "nullable": false,
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/role"
+            }
+          }
+        }
+      },
+      "task": {
+        "title": "Task",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Идентификатор задачи",
+            "nullable": false,
+            "example": "1"
+          },
+          "title": {
+            "type": "string",
+            "title": "Название задачи",
+            "nullable": false,
+            "example": "Разработать документацию для проекта"
+          },
+          "status": {
+            "type": "string",
+            "title": "Статус задачи",
+            "nullable": false,
+            "example": "IN_PROCESS"
+          },
+          "priority": {
+            "type": "string",
+            "title": "Приоритет задачи",
+            "nullable": false,
+            "example": "LOW"
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date",
+            "title": "Время создания задачи",
+            "nullable": false,
+            "example": "Mon Jan 13 18:13:57 MSK 2025"
+          },
+          "author": {
+            "type": "array",
+            "title": "Автор задачи",
+            "nullable": false,
+            "maximum": 1,
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/user"
+            }
+          },
+          "executors": {
+            "type": "array",
+            "title": "Список исполнителей задачи",
+            "nullable": true,
+            "minimum": 1,
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/user"
+            }
+          },
+          "comments": {
+            "type": "array",
+            "title": "Список комментариев к задаче",
+            "nullable": true,
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/comment"
+            }
+          }
+        }
+      }
+    }
+  }
+}
