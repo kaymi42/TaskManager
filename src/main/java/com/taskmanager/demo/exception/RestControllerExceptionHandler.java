@@ -1,6 +1,5 @@
 package com.taskmanager.demo.exception;
 
-import com.taskmanager.demo.dto.AppError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,5 +16,10 @@ public class RestControllerExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> accessDenied(AccessDeniedException exception){
         return new ResponseEntity<>(exception.getApiResponse(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> badRequest(BadRequestException exception){
+        return new ResponseEntity<>(exception.getApiResponse(), HttpStatus.BAD_REQUEST);
     }
 }

@@ -229,6 +229,624 @@
           }
         ]
       }
+    },
+    "/tasks": {
+      "get": {
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный результат получения информации о всех задачах",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/task"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "201": {
+            "description": "Успешное создание задачи",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/task"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "title",
+            "required": true,
+            "in": "query",
+            "description": "Заголовок задачи",
+            "schema": {
+              "type": "string",
+              "example": "Разработать документацию для проекта"
+            }
+          },
+          {
+            "name": "status",
+            "required": true,
+            "in": "query",
+            "description": "Статус задачи",
+            "schema": {
+              "type": "string",
+              "example": "IN_PROCESS"
+            }
+          },
+          {
+            "name": "priority",
+            "required": true,
+            "in": "query",
+            "description": "Приоритет задачи",
+            "schema": {
+              "type": "string",
+              "example": "LOW"
+            }
+          }
+        ]
+      }
+    },
+    "/{id}/tasks": {
+      "get": {
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный результат получения информации о задаче по id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/task"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ошибка получения данных о задаче",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Идентификатор задачи",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное изменение задачи",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/task"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Задачи не существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Нет достаточных прав для изменения задачи",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Идентификатор задачи",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          },
+          {
+            "name": "title",
+            "required": true,
+            "in": "query",
+            "description": "Заголовок задачи",
+            "schema": {
+              "type": "string",
+              "example": "Разработать документацию для проекта"
+            }
+          },
+          {
+            "name": "status",
+            "required": true,
+            "in": "query",
+            "description": "Статус задачи",
+            "schema": {
+              "type": "string",
+              "example": "IN_PROCESS"
+            }
+          },
+          {
+            "name": "priority",
+            "required": true,
+            "in": "query",
+            "description": "Приоритет задачи",
+            "schema": {
+              "type": "string",
+              "example": "LOW"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный результат удаления задачи по id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Задача была удалена"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Нет достаточных прав для удаления задачи",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Задачи или пользователя не существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Идентификатор задачи",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          }
+        ]
+      }
+    },
+    "/{id}/executors": {
+      "patch": {
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное изменение исполнителей задачи",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/task"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Задачи не существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Невалидные данные запроса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Идентификатор задачи",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          },
+          {
+            "name": "executors",
+            "required": true,
+            "in": "query",
+            "description": "Список имен исполнителей",
+            "schema": {
+              "type": "array",
+              "example": [
+                "Александр",
+                "Алексей"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/{id}/status": {
+      "patch": {
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное изменение статуса задачи",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/task"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Задачи не существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "status",
+            "required": true,
+            "in": "query",
+            "description": "Статус задачи",
+            "schema": {
+              "type": "string",
+              "example": "IN_PROCESS"
+            }
+          }
+        ]
+      }
+    },
+    "/{id}/priority": {
+      "patch": {
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное изменение приоритета задачи",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/task"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Задачи не существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "priority",
+            "required": true,
+            "in": "query",
+            "description": "Приоритет задачи",
+            "schema": {
+              "type": "string",
+              "example": "LOW"
+            }
+          }
+        ]
+      }
+    },
+    "/{id}/comments": {
+      "get": {
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное получение информации о комментариях задачи",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/comment"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Задачи не существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Идентификатор задачи",
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "201": {
+            "description": "Успешное создание комментария к задаче",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/comment"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ресурса не существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Идентификатор задачи",
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          },
+          {
+            "name": "content",
+            "required": true,
+            "in": "query",
+            "description": "Содержание комментария",
+            "schema": {
+              "type": "string",
+              "example": "Для выполнения задачи понадобится больше времени"
+            }
+          }
+        ]
+      }
+    },
+    "/{id}/comments/{commentId}": {
+      "patch": {
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "201": {
+            "description": "Успешное изменение комментария",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/comment"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ресурса не существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Нет достаточных прав для изменения задачи",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Идентификатор задачи",
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          },
+          {
+            "name": "commentId",
+            "required": true,
+            "in": "path",
+            "description": "Идентификатор комментария",
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          },
+          {
+            "name": "content",
+            "required": true,
+            "in": "query",
+            "description": "Содержание комментария",
+            "schema": {
+              "type": "string",
+              "example": "Для выполнения задачи понадобится больше времени"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Task"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление комментария",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Комментарий удален"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Нет достаточных прав для изменения задачи",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ресурса не существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Идентификатор задачи",
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          },
+          {
+            "name": "commentId",
+            "required": true,
+            "in": "path",
+            "description": "Идентификатор комментария",
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -354,7 +972,7 @@
           },
           "title": {
             "type": "string",
-            "title": "Название задачи",
+            "title": "Заголовок задачи",
             "nullable": false,
             "example": "Разработать документацию для проекта"
           },

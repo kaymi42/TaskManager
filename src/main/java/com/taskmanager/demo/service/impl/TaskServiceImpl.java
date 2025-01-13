@@ -38,12 +38,12 @@ public class TaskServiceImpl {
         User author = userService.findByUsername(authorName);
 
         Task task = new Task();
+        // TODO: validate taskDto -> BabCredentials
         task.setTitle(taskDto.getTitle());
         task.setStatus(Status.valueOf(taskDto.getStatus()));
         task.setPriority(Priority.valueOf(taskDto.getPriority()));
         task.setAuthor(author);
-        task.setStatus(Status.WAITING);
-        task.setPriority(Priority.LOW);
+
         task.setCreationDate(new Date());
 
         return taskRepository.save(task);
@@ -55,7 +55,7 @@ public class TaskServiceImpl {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
         if (user.getRoles().stream().anyMatch(r -> r.getName().equals("ROLE_ADMIN")) || task.getAuthor().getId().equals(user.getId())) {
-
+            // TODO: validate taskDto -> BabCredentials
             task.setTitle(taskDto.getTitle());
             task.setStatus(Status.valueOf(taskDto.getStatus()));
             task.setPriority(Priority.valueOf(taskDto.getPriority()));
@@ -83,7 +83,7 @@ public class TaskServiceImpl {
         List<User> executors = new ArrayList<>();
         User executor = null;
         for (String executorName : executorsNames) {
-            executor = userService.findByUsername(executorName);
+            executor = userService.findExecutorByUsername(executorName);
             executors.add(executor);
         }
 
@@ -94,6 +94,7 @@ public class TaskServiceImpl {
     }
 
     public Task setStatus(Long id, String status) {
+        // TODO: validate status
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
         task.setStatus(Status.valueOf(status));
@@ -153,7 +154,7 @@ public class TaskServiceImpl {
             taskRepository.save(task);
             commentRepository.save(comment);
 
-            return new ResponseEntity<>("Comment was updated", HttpStatus.CREATED);
+            return new ResponseEntity<>(comment, HttpStatus.CREATED);
         } else {
             throw new AccessDeniedException("update", "comment");
         }

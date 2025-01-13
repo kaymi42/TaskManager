@@ -4,6 +4,7 @@ import com.taskmanager.demo.dto.RegistrationUserDto;
 import com.taskmanager.demo.entity.Comment;
 import com.taskmanager.demo.entity.Task;
 import com.taskmanager.demo.entity.User;
+import com.taskmanager.demo.exception.BadRequestException;
 import com.taskmanager.demo.exception.ResourceNotFoundException;
 import com.taskmanager.demo.repository.CommentRepository;
 import com.taskmanager.demo.repository.TaskRepository;
@@ -14,13 +15,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.StyledEditorKit;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,6 +56,11 @@ public class UserServiceImpl implements UserDetailsService {
     public User findByUsername(String username){
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+    }
+
+    public User findExecutorByUsername(String username){
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new BadRequestException(username));
     }
 
     public Boolean existsByUsername(String username){

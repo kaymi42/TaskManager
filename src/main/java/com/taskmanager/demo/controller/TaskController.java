@@ -43,7 +43,7 @@ public class TaskController {
     }
 
     // === ADMIN or AUTHOR ===
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<?> updateTaskById(@PathVariable("id") Long id, @RequestBody TaskDto taskDto, Principal principal){
         return taskService.updateTaskById(id, taskDto, principal.getName());
 
@@ -56,21 +56,21 @@ public class TaskController {
     }
 
     // === ADMIN ===
-    @RequestMapping(value = "/{id}/executors", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}/executors", method = RequestMethod.PATCH)
     public ResponseEntity<?> setExecutorsForTask(@PathVariable("id") Long id, @RequestBody Executors executorsNames){
         Task task = taskService.setExecutors(id, executorsNames.getExecutorsNames());
         return ResponseEntity.ok(task);
     }
 
     // === ALL ===
-    @RequestMapping(value = "/{id}/status", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}/status", method = RequestMethod.PATCH)
     public ResponseEntity<?> setStatusForTask(@PathVariable("id") Long id, @RequestBody StringDto status){
         Task task = taskService.setStatus(id,status.getContent());
         return ResponseEntity.ok(task);
     }
 
     // === ADMIN ===
-    @RequestMapping(value = "/{id}/priority", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}/priority", method = RequestMethod.PATCH)
     public ResponseEntity<?> setPriorityForTask(@PathVariable("id") Long id, @RequestBody StringDto priority){
         Task task = taskService.setPriority(id, priority.getContent());
         return ResponseEntity.ok(task);
@@ -95,7 +95,7 @@ public class TaskController {
     }
 
     // === AUTHOR OF COMMENT or ADMIN ===
-    @RequestMapping(value = "/{id}/comments/{commentId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}/comments/{commentId}", method = RequestMethod.PATCH)
     public ResponseEntity<?> updateCommentForTaskById(
             @PathVariable("id") Long id,
             @PathVariable("commentId") Long commentId,
