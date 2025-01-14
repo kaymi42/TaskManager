@@ -26,7 +26,10 @@ public class AuthServiceImpl {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         } catch (BadCredentialsException e ){
-            return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Неправильный логин или пароль"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new AppError(
+                    HttpStatus.UNAUTHORIZED.value(),
+                    "Неправильный логин или пароль"),
+                    HttpStatus.UNAUTHORIZED);
         }
         UserDetails userDetails = userService.loadUserByUsername(request.getUsername());
         String token = jwtTokenUtils.generateToken(userDetails);
@@ -35,11 +38,16 @@ public class AuthServiceImpl {
 
     public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto){
         if(!registrationUserDto.getPassword().equals(registrationUserDto.getConfirmPassword())){
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароли не совпадают"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new AppError(
+                    HttpStatus.BAD_REQUEST.value(),
+                    "Пароли не совпадают"),
+                    HttpStatus.BAD_REQUEST);
         }
-        // TODO: add reference on Object
         if(userService.existsByUsername(registrationUserDto.getUsername())){
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем уже существует"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new AppError(
+                    HttpStatus.UNAUTHORIZED.value(),
+                    String.format("Пользователь с именем %s уже существует", registrationUserDto.getUsername())),
+                    HttpStatus.UNAUTHORIZED);
         }
         User user = userService.createNewUser(registrationUserDto);
         return ResponseEntity.ok(new UserDtoResponse(user.getId(), user.getUsername(), user.getEmail()));

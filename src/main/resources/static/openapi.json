@@ -847,6 +847,160 @@
           }
         ]
       }
+    },
+    "/auth": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешная аутентификация",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "JWT-токен",
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Ошибка аутентификации пользователя",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "username",
+            "required": true,
+            "in": "query",
+            "description": "Имя пользователя",
+            "schema": {
+              "type": "string",
+              "example": "Alexander"
+            }
+          },
+          {
+            "name": "password",
+            "required": true,
+            "in": "query",
+            "description": "Пароль пользователя",
+            "schema": {
+              "type": "string",
+              "example": "123456qwerty"
+            }
+          }
+        ]
+      }
+    },
+    "/registration": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное создание пользователя",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "title": "Идентификатор пользователя",
+                      "nullable": false,
+                      "example": "1"
+                    },
+                    "username": {
+                      "type": "string",
+                      "title": "Имя пользователя",
+                      "nullable": false,
+                      "example": "Alexander"
+                    },
+                    "email": {
+                      "type": "string",
+                      "title": "Email пользователя",
+                      "nullable": false,
+                      "example": "alexander@mail.ru"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Пароли не совпадают",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Пользователь с таким именем уже существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/appError"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "username",
+            "required": true,
+            "in": "query",
+            "description": "Имя пользователя",
+            "schema": {
+              "type": "string",
+              "example": "Alexander"
+            }
+          },
+          {
+            "name": "password",
+            "required": true,
+            "in": "query",
+            "description": "Пароль пользователя",
+            "schema": {
+              "type": "string",
+              "example": "123456qwerty"
+            }
+          },
+          {
+            "name": "confirmPassword",
+            "required": true,
+            "in": "query",
+            "description": "Подтверждение пароля",
+            "schema": {
+              "type": "string",
+              "example": "123456qwerty"
+            }
+          },
+          {
+            "name": "email",
+            "required": true,
+            "in": "query",
+            "description": "Email пользователя",
+            "schema": {
+              "type": "string",
+              "example": "alexander@mail.ru"
+            }
+          }
+        ]
+      }
     }
   },
   "components": {

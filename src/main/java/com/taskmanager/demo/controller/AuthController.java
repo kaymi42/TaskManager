@@ -4,21 +4,19 @@ import com.taskmanager.demo.dto.*;
 import com.taskmanager.demo.service.impl.AuthServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
 public class AuthController {
     private final AuthServiceImpl authService;
 
-    @PostMapping("/auth")
+    @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest request){
         return authService.createAuthToken(request);
     }
 
-    @PostMapping("/registration")
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto){
         return authService.createNewUser(registrationUserDto);
     }
