@@ -15,9 +15,4 @@ public class AppError {
         this.message = message;
         this.timestamp = new Date();
     }
-
-    public static void main(String[] args) {
-        AppError a = new AppError(23, "3232");
-        System.out.println(a.timestamp);
-    }
 }
