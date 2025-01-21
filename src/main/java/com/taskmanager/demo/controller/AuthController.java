@@ -2,6 +2,7 @@ package com.taskmanager.demo.controller;
 
 import com.taskmanager.demo.dto.*;
 import com.taskmanager.demo.service.impl.AuthServiceImpl;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto){
+    public ResponseEntity<?> createNewUser(@Valid @RequestBody RegistrationUserDto registrationUserDto){
         return authService.createNewUser(registrationUserDto);
     }
 }

@@ -1,11 +1,10 @@
 package com.taskmanager.demo.controller;
 
-import com.taskmanager.demo.dto.Executors;
-import com.taskmanager.demo.dto.StringDto;
-import com.taskmanager.demo.dto.TaskDto;
+import com.taskmanager.demo.dto.*;
 import com.taskmanager.demo.entity.Comment;
 import com.taskmanager.demo.entity.Task;
 import com.taskmanager.demo.service.impl.TaskServiceImpl;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,7 @@ public class TaskController {
 
     // === ALL ===
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> createTask(@RequestBody TaskDto taskDto, Principal principal){
+    public ResponseEntity<?> createTask(@Valid @RequestBody TaskDto taskDto, Principal principal){
         Task task = taskService.createTask(taskDto, principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(task);
     }
@@ -44,7 +43,7 @@ public class TaskController {
 
     // === ADMIN or AUTHOR ===
     @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
-    public ResponseEntity<?> updateTaskById(@PathVariable("id") Long id, @RequestBody TaskDto taskDto, Principal principal){
+    public ResponseEntity<?> updateTaskById(@PathVariable("id") Long id,@Valid @RequestBody TaskDto taskDto, Principal principal){
         return taskService.updateTaskById(id, taskDto, principal.getName());
 
     }
@@ -57,22 +56,22 @@ public class TaskController {
 
     // === ADMIN ===
     @RequestMapping(value = "/{id}/executors", method = RequestMethod.PATCH)
-    public ResponseEntity<?> setExecutorsForTask(@PathVariable("id") Long id, @RequestBody Executors executorsNames){
+    public ResponseEntity<?> setExecutorsForTask(@PathVariable("id") Long id, @Valid @RequestBody Executors executorsNames){
         Task task = taskService.setExecutors(id, executorsNames.getExecutorsNames());
         return ResponseEntity.ok(task);
     }
 
     // === ALL ===
     @RequestMapping(value = "/{id}/status", method = RequestMethod.PATCH)
-    public ResponseEntity<?> setStatusForTask(@PathVariable("id") Long id, @RequestBody StringDto status){
-        Task task = taskService.setStatus(id,status.getContent());
+    public ResponseEntity<?> setStatusForTask(@PathVariable("id") Long id, @Valid @RequestBody StatusDto status){
+        Task task = taskService.setStatus(id,status.getStatus());
         return ResponseEntity.ok(task);
     }
 
     // === ADMIN ===
     @RequestMapping(value = "/{id}/priority", method = RequestMethod.PATCH)
-    public ResponseEntity<?> setPriorityForTask(@PathVariable("id") Long id, @RequestBody StringDto priority){
-        Task task = taskService.setPriority(id, priority.getContent());
+    public ResponseEntity<?> setPriorityForTask(@PathVariable("id") Long id, @Valid @RequestBody PriorityDto priority){
+        Task task = taskService.setPriority(id, priority.getPriority());
         return ResponseEntity.ok(task);
     }
 
@@ -87,7 +86,7 @@ public class TaskController {
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
     public ResponseEntity<?> createCommentForTaskById(
             @PathVariable("id") Long id,
-            @RequestBody StringDto content,
+            @Valid @RequestBody CommentContentDto content,
             Principal principal)
     {
         Comment comment = taskService.createCommentForTaskById(id, content.getContent(), principal.getName());
@@ -99,7 +98,7 @@ public class TaskController {
     public ResponseEntity<?> updateCommentForTaskById(
             @PathVariable("id") Long id,
             @PathVariable("commentId") Long commentId,
-            @RequestBody StringDto content,
+            @Valid @RequestBody CommentContentDto content,
             Principal principal)
     {
         return taskService.updateCommentForTaskById(id, commentId, content.getContent(), principal.getName());

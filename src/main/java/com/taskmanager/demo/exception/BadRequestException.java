@@ -17,6 +17,11 @@ public class BadRequestException extends RuntimeException{
         this.setApiResponse();
     }
 
+    public BadRequestException(AppError apiResponse) {
+        super();
+        this.apiResponse = apiResponse;
+    }
+
     private void setApiResponse() {
         String message = String.format("%s is incorrect", resourceName);
         this.apiResponse = new AppError(HttpStatus.BAD_REQUEST.value(), message);

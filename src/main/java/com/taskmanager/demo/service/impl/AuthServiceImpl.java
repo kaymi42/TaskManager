@@ -2,6 +2,8 @@ package com.taskmanager.demo.service.impl;
 
 import com.taskmanager.demo.dto.*;
 import com.taskmanager.demo.entity.User;
+import com.taskmanager.demo.exception.BadRequestException;
+import com.taskmanager.demo.exception.UnauthorizedException;
 import com.taskmanager.demo.utils.JwtTokenUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,7 +13,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
@@ -26,10 +27,8 @@ public class AuthServiceImpl {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         } catch (BadCredentialsException e ){
-            return new ResponseEntity<>(new AppError(
-                    HttpStatus.UNAUTHORIZED.value(),
-                    "Неправильный логин или пароль"),
-                    HttpStatus.UNAUTHORIZED);
+            AppError apiResponse = new AppError(HttpStatus.BAD_REQUEST.value(),"Incorrect login or password");
+            throw new BadRequestException(apiResponse);
         }
         UserDetails userDetails = userService.loadUserByUsername(request.getUsername());
         String token = jwtTokenUtils.generateToken(userDetails);
@@ -38,16 +37,13 @@ public class AuthServiceImpl {
 
     public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto){
         if(!registrationUserDto.getPassword().equals(registrationUserDto.getConfirmPassword())){
-            return new ResponseEntity<>(new AppError(
-                    HttpStatus.BAD_REQUEST.value(),
-                    "Пароли не совпадают"),
-                    HttpStatus.BAD_REQUEST);
+            AppError apiResponse = new AppError(HttpStatus.BAD_REQUEST.value(),"Passwords do not match");
+            throw new BadRequestException(apiResponse);
         }
         if(userService.existsByUsername(registrationUserDto.getUsername())){
-            return new ResponseEntity<>(new AppError(
-                    HttpStatus.UNAUTHORIZED.value(),
-                    String.format("Пользователь с именем %s уже существует", registrationUserDto.getUsername())),
-                    HttpStatus.UNAUTHORIZED);
+            AppError apiResponse = new AppError(HttpStatus.UNAUTHORIZED.value(),
+                    String.format("User with '%s' username already exist", registrationUserDto.getUsername()));
+            throw new UnauthorizedException(apiResponse);
         }
         User user = userService.createNewUser(registrationUserDto);
         return ResponseEntity.ok(new UserDtoResponse(user.getId(), user.getUsername(), user.getEmail()));

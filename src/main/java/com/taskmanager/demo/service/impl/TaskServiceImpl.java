@@ -1,6 +1,5 @@
 package com.taskmanager.demo.service.impl;
 
-import com.taskmanager.demo.dto.AppError;
 import com.taskmanager.demo.dto.TaskDto;
 import com.taskmanager.demo.entity.Comment;
 import com.taskmanager.demo.entity.Task;
