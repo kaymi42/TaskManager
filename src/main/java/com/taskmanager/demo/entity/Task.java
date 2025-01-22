@@ -3,11 +3,16 @@ package com.taskmanager.demo.entity;
 import com.taskmanager.demo.entity.enums.Priority;
 import com.taskmanager.demo.entity.enums.Status;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Collection;
 import java.util.Date;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "tasks")
 public class Task {

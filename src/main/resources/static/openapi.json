@@ -8,7 +8,7 @@
   "servers": [
     {
       "url": "http://localhost:8080",
-      "description": "Local server for develop"
+      "description": "Local server for dev"
     }
   ],
   "paths": {
@@ -723,7 +723,7 @@
           "Task"
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "Успешное изменение комментария",
             "content": {
               "application/json": {

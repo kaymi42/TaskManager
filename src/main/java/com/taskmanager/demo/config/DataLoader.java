@@ -67,16 +67,16 @@ public class DataLoader {
 
         Comment comment1 = new Comment();
         comment1.setAuthor(user2);
-        comment1.setContent("Задача слишком сложна");
+        comment1.setContent("The task too strong");
 
 
         Comment comment2 = new Comment();
         comment2.setAuthor(user3);
-        comment2.setContent("Интересная задача");
+        comment2.setContent("The task is very strong for me");
 
         Comment comment3 = new Comment();
         comment3.setAuthor(user2);
-        comment3.setContent("Решение потребует больше времени");
+        comment3.setContent("To solve the task needs much more time");
 
         commentRepository.save(comment1);
         commentRepository.save(comment2);
@@ -89,7 +89,7 @@ public class DataLoader {
         task1.setStatus(Status.IN_PROCESS);
         task1.setPriority(Priority.HIGH);
         task1.setCreationDate(new Date());
-        task1.setTitle("Создание программного продукта");
+        task1.setTitle("Create a new program product base on Spring");
 
         Task task2 = new Task();
         task2.setAuthor(user2);
@@ -98,7 +98,7 @@ public class DataLoader {
         task2.setStatus(Status.WAITING);
         task2.setPriority(Priority.LOW);
         task2.setCreationDate(new Date());
-        task2.setTitle("Реализовать базу данных");
+        task2.setTitle("Create documentation for all controllers");
 
 
         taskRepository.save(task1);

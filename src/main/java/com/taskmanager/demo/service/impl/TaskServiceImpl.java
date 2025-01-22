@@ -37,7 +37,6 @@ public class TaskServiceImpl {
         User author = userService.findByUsername(authorName);
 
         Task task = new Task();
-        // TODO: validate taskDto -> BabCredentials
         task.setTitle(taskDto.getTitle());
         task.setStatus(Status.valueOf(taskDto.getStatus()));
         task.setPriority(Priority.valueOf(taskDto.getPriority()));
@@ -49,17 +48,16 @@ public class TaskServiceImpl {
     }
 
 
-    public ResponseEntity<?> updateTaskById(Long id, TaskDto taskDto, String authorName) {
+    public ResponseEntity<Task> updateTaskById(Long id, TaskDto taskDto, String authorName) {
         User user = userService.findByUsername(authorName);
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
         if (user.getRoles().stream().anyMatch(r -> r.getName().equals("ROLE_ADMIN")) || task.getAuthor().getId().equals(user.getId())) {
-            // TODO: validate taskDto -> BabCredentials
             task.setTitle(taskDto.getTitle());
             task.setStatus(Status.valueOf(taskDto.getStatus()));
             task.setPriority(Priority.valueOf(taskDto.getPriority()));
             taskRepository.save(task);
-            return ResponseEntity.ok("Task was updated");
+            return ResponseEntity.ok(task);
         } else {
             throw new AccessDeniedException("update", "task");
         }
@@ -133,7 +131,7 @@ public class TaskServiceImpl {
         return comment;
     }
 
-    public ResponseEntity<?> updateCommentForTaskById(Long id, Long commentId, String content, String authorName) {
+    public ResponseEntity<Comment> updateCommentForTaskById(Long id, Long commentId, String content, String authorName) {
         User user = userService.findByUsername(authorName);
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
@@ -153,7 +151,7 @@ public class TaskServiceImpl {
             taskRepository.save(task);
             commentRepository.save(comment);
 
-            return new ResponseEntity<>(comment, HttpStatus.CREATED);
+            return ResponseEntity.ok(comment);
         } else {
             throw new AccessDeniedException("update", "comment");
         }
